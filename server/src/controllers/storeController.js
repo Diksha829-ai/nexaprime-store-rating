@@ -28,14 +28,24 @@ exports.getStores = async (req, res) => {
       });
     }
 
-    const filter = search
-      ? {
+const filter = search
+  ? {
+      $or: [
+        {
           name: {
             $regex: escapeRegex(search),
             $options: "i",
           },
-        }
-      : {};
+        },
+        {
+          address: {
+            $regex: escapeRegex(search),
+            $options: "i",
+          },
+        },
+      ],
+    }
+  : {};
 
     const stores = await Store.find(filter)
       .select("name address")
